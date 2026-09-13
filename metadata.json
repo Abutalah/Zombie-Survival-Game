@@ -1,0 +1,6 @@
+{
+  "name": "Zombie Survival 3D",
+  "description": "3D Zombie Survival FPS game built with Three.js, Cannon-es physics, and instanced mesh rendering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

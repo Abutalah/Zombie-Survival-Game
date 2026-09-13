@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Zombie Survival 3D</title>
+  <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+  <!-- 3D Canvas Viewport -->
+  <div id="canvas-container"></div>
+
+  <!-- Red Damage & Critical Vignette Overlay -->
+  <div id="damage-vignette"></div>
+
+  <!-- Floating Damage Popups -->
+  <div id="damage-numbers-container"></div>
+
+  <!-- Tactical Combat HUD -->
+  <div id="hud">
+    <!-- Dynamic Reticle / Crosshair -->
+    <div id="crosshair">
+      <div class="crosshair-line crosshair-top"></div>
+      <div class="crosshair-line crosshair-bottom"></div>
+      <div class="crosshair-line crosshair-left"></div>
+      <div class="crosshair-line crosshair-right"></div>
+      <div class="crosshair-dot"></div>
+    </div>
+
+    <!-- Hitmarker SVG -->
+    <div id="hitmarker">
+      <svg viewBox="0 0 32 32">
+        <line x1="6" y1="6" x2="12" y2="12" />
+        <line x1="26" y1="6" x2="20" y2="12" />
+        <line x1="6" y1="26" x2="12" y2="20" />
+        <line x1="26" y1="26" x2="20" y2="20" />
+      </svg>
+    </div>
+
+    <!-- Top Left: Wave Status & Score -->
+    <div class="hud-top-left">
+      <div class="hud-panel">
+        <div>
+          <div class="wave-title">SURVIVAL WAVE</div>
+          <div class="wave-number" id="wave-number">1</div>
+        </div>
+        <div style="width: 1px; height: 28px; background: rgba(255,255,255,0.15);"></div>
+        <div class="zombies-count-box">
+          <span>HOSTILES:</span>
+          <span class="zombies-count-value" id="zombies-count-val">0</span>
+        </div>
+        <div style="width: 1px; height: 28px; background: rgba(255,255,255,0.15);"></div>
+        <div>
+          <span style="font-size: 11px; color: #a4b0be; font-weight: 700;">SCORE:</span>
+          <span class="score-display" id="score-val">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Right: Radar Minimap & Pause Button -->
+    <div class="hud-top-right">
+      <button class="hud-btn" id="pause-btn">PAUSE</button>
+      <canvas id="minimap-canvas" width="120" height="120"></canvas>
+    </div>
+
+    <!-- Center Wave Banner Announcement -->
+    <div id="wave-banner">
+      <div class="wave-banner-title" id="wave-banner-title">WAVE 1</div>
+      <div class="wave-banner-subtitle" id="wave-banner-subtitle">INCOMING IN 4s</div>
+    </div>
+
+    <!-- Bottom Left: Health & Stamina -->
+    <div class="hud-bottom-left">
+      <div class="stat-bar-container">
+        <div class="stat-label-row">
+          <span class="stat-label-health">VITAL SIGNS</span>
+          <span id="health-val" style="color: #ffffff;">100 HP</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill health-fill" id="health-bar-fill"></div>
+        </div>
+      </div>
+
+      <div class="stat-bar-container">
+        <div class="stat-label-row">
+          <span class="stat-label-stamina">SPRINT STAMINA</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill stamina-fill" id="stamina-bar-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Right: Ammo & Weapon Loadout -->
+    <div class="hud-bottom-right">
+      <div class="ammo-panel">
+        <div class="ammo-current" id="ammo-current">12</div>
+        <div class="ammo-separator">/</div>
+        <div class="ammo-reserve" id="ammo-reserve">48</div>
+        <div class="ammo-reloading hidden" id="ammo-reloading">RELOADING...</div>
+      </div>
+
+      <div class="weapons-row">
+        <div class="weapon-card active" id="weapon-card-0">
+          <span class="weapon-num">[1]</span>
+          <span class="weapon-name">PISTOL</span>
+        </div>
+        <div class="weapon-card" id="weapon-card-1">
+          <span class="weapon-num">[2]</span>
+          <span class="weapon-name">SHOTGUN</span>
+        </div>
+        <div class="weapon-card" id="weapon-card-2">
+          <span class="weapon-num">[3]</span>
+          <span class="weapon-name">RIFLE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- On-Screen Mobile / Touch Controls Overlay -->
+  <div id="touch-controls">
+    <!-- Left Virtual Analog Joystick -->
+    <div id="joystick-area">
+      <div id="joystick-knob"></div>
+    </div>
+
+    <!-- Right 360 Look & Aim Area -->
+    <div id="touch-look-area"></div>
+
+    <!-- Touch Action Buttons -->
+    <div class="touch-action-btn" id="touch-fire-btn">FIRE</div>
+    <div class="touch-action-btn" id="touch-ads-btn">AIM</div>
+    <div class="touch-action-btn" id="touch-reload-btn">RELOAD</div>
+    <div class="touch-action-btn" id="touch-jump-btn">JUMP</div>
+    <div class="touch-action-btn" id="touch-crouch-btn">CROUCH</div>
+  </div>
+
+  <!-- Start Game / Mission Deploy Screen -->
+  <div class="screen-overlay" id="start-screen">
+    <div class="screen-card">
+      <div class="game-logo">ZOMBIE SURVIVAL 3D</div>
+      <div class="game-sublogo">THREE.JS • CANNON-ES • INSTANCED HORDE ENGINE</div>
+
+      <div class="instruction-grid">
+        <div class="instruction-item"><span class="instruction-key">W A S D</span> Move</div>
+        <div class="instruction-item"><span class="instruction-key">MOUSE</span> Look & Aim</div>
+        <div class="instruction-item"><span class="instruction-key">L-CLICK</span> Shoot / Fire</div>
+        <div class="instruction-item"><span class="instruction-key">R-CLICK</span> Aim Down Sights</div>
+        <div class="instruction-item"><span class="instruction-key">SHIFT</span> Sprint</div>
+        <div class="instruction-item"><span class="instruction-key">SPACE</span> Jump</div>
+        <div class="instruction-item"><span class="instruction-key">R</span> Reload</div>
+        <div class="instruction-item"><span class="instruction-key">1 2 3</span> Switch Weapon</div>
+      </div>
+
+      <p style="font-size: 12px; color: #a4b0be; margin-bottom: 8px;">
+        💡 On mobile/emulator: Use virtual joystick & on-screen buttons. Shoot explosive red barrels for massive AOE damage! Headshots deal 3x critical damage!
+      </p>
+
+      <button class="action-btn-large" id="start-btn">DEPLOY MISSION</button>
+    </div>
+  </div>
+
+  <!-- Pause Screen -->
+  <div class="screen-overlay hidden" id="pause-screen">
+    <div class="screen-card">
+      <div class="game-logo" style="font-size: 28px;">TACTICAL PAUSE</div>
+      <p style="color: #ced6e0; font-size: 14px; margin: 12px 0 20px;">Mission paused. Take a breath, soldier.</p>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="action-btn-large" id="resume-btn" style="background: #2ed573;">RESUME</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div class="screen-overlay hidden" id="game-over-screen">
+    <div class="screen-card">
+      <div class="game-logo" style="color: #ff3838;">MISSION FAILED</div>
+      <div class="game-sublogo">YOU WERE OVERRUN BY THE UNDEAD</div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-box-label">Waves Survived</div>
+          <div class="stat-box-value" id="stat-waves">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">Zombies Killed</div>
+          <div class="stat-box-value" id="stat-kills">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">Headshots</div>
+          <div class="stat-box-value" id="stat-headshots">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">Final Score</div>
+          <div class="stat-box-value" id="stat-score" style="color: #2ed573;">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">Shot Accuracy</div>
+          <div class="stat-box-value" id="stat-accuracy">0%</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">Survival Time</div>
+          <div class="stat-box-value" id="stat-time">0:00</div>
+        </div>
+      </div>
+
+      <button class="action-btn-large" id="restart-btn">DEPLOY AGAIN</button>
+    </div>
+  </div>
+
+  <!-- Standalone Game Script Bundle -->
+  <script src="js/bundle.js"></script>
+</body>
+</html>
