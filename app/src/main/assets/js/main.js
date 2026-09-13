@@ -95,6 +95,7 @@ class ZombieSurvivalGame {
 
     this.ui.onResumeGame = () => this.resumeGame();
     this.ui.onPauseGame = () => this.pauseGame();
+    this.ui.onFire = () => this.handleWeaponFire();
 
     // Barrel explosion event link
     this.environment.onBarrelExploded = (pos, radius, damage) => {
@@ -235,11 +236,25 @@ class ZombieSurvivalGame {
   }
 
   initWindowEvents() {
-    window.addEventListener('resize', () => {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
-      this.camera.updateProjectionMatrix();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
+    const handleResize = () => {
+      const w = window.innerWidth || document.documentElement.clientWidth || screen.width;
+      const h = window.innerHeight || document.documentElement.clientHeight || screen.height;
+      if (w > 0 && h > 0) {
+        this.camera.aspect = w / h;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(w, h, false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(handleResize, 100);
+      setTimeout(handleResize, 400);
     });
+
+    // Ensure size is calibrated after DOM ready
+    setTimeout(handleResize, 100);
+    setTimeout(handleResize, 500);
 
     // Auto pause on tab hidden
     document.addEventListener('visibilitychange', () => {

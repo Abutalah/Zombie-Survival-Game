@@ -27,14 +27,18 @@ export class Environment {
 
   initLights() {
     // Atmospheric Fog
-    this.scene.fog = new THREE.FogExp2(0x090d16, 0.024);
+    this.scene.fog = new THREE.FogExp2(0x0e1422, 0.016);
 
-    // Ambient Moonlight
-    const ambientLight = new THREE.AmbientLight(0x222c3d, 0.6);
+    // Rich Ambient Light
+    const ambientLight = new THREE.AmbientLight(0x758aa4, 1.1);
     this.scene.add(ambientLight);
 
+    // Hemisphere Light (sky light & ground bounce)
+    const hemiLight = new THREE.HemisphereLight(0x9fc0e8, 0x222a36, 0.9);
+    this.scene.add(hemiLight);
+
     // Directional Moonlight with Shadows
-    this.moonLight = new THREE.DirectionalLight(0x8fa8d0, 1.2);
+    this.moonLight = new THREE.DirectionalLight(0xdce7fa, 1.5);
     this.moonLight.position.set(30, 45, 25);
     this.moonLight.castShadow = true;
     this.moonLight.shadow.mapSize.width = 1024;

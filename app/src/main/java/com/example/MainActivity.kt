@@ -81,7 +81,6 @@ fun GameScreen(onWebViewReady: (WebView) -> Unit) {
 
     val webView = remember {
         WebView(context).apply {
-            setLayerType(View.LAYER_TYPE_SOFTWARE, null)
             setBackgroundColor(android.graphics.Color.BLACK)
 
             settings.apply {
@@ -93,8 +92,8 @@ fun GameScreen(onWebViewReady: (WebView) -> Unit) {
                 allowFileAccessFromFileURLs = true
                 allowUniversalAccessFromFileURLs = true
                 mediaPlaybackRequiresUserGesture = false
-                useWideViewPort = true
-                loadWithOverviewMode = true
+                useWideViewPort = false
+                loadWithOverviewMode = false
                 cacheMode = WebSettings.LOAD_NO_CACHE
             }
 

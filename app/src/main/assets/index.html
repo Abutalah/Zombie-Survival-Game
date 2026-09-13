@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Zombie Survival 3D</title>
   <link rel="stylesheet" href="css/game.css">
 </head>
@@ -91,8 +91,8 @@
       </div>
     </div>
 
-    <!-- Bottom Right: Ammo & Weapon Loadout -->
-    <div class="hud-bottom-right">
+    <!-- Bottom Center: Ammo & Weapon Loadout -->
+    <div class="hud-bottom-center">
       <div class="ammo-panel">
         <div class="ammo-current" id="ammo-current">12</div>
         <div class="ammo-separator">/</div>
@@ -122,10 +122,13 @@
     <!-- Left Virtual Analog Joystick -->
     <div id="joystick-area">
       <div id="joystick-knob"></div>
+      <div class="joystick-label">MOVE</div>
     </div>
 
     <!-- Right 360 Look & Aim Area -->
-    <div id="touch-look-area"></div>
+    <div id="touch-look-area">
+      <div class="look-area-hint">DRAG TO AIM</div>
+    </div>
 
     <!-- Touch Action Buttons -->
     <div class="touch-action-btn" id="touch-fire-btn">FIRE</div>
@@ -139,24 +142,21 @@
   <div class="screen-overlay" id="start-screen">
     <div class="screen-card">
       <div class="game-logo">ZOMBIE SURVIVAL 3D</div>
-      <div class="game-sublogo">THREE.JS • CANNON-ES • INSTANCED HORDE ENGINE</div>
+      <div class="game-sublogo">HORDE COMBAT • FULL TOUCH & KEYBOARD CONTROLS</div>
 
-      <div class="instruction-grid">
-        <div class="instruction-item"><span class="instruction-key">W A S D</span> Move</div>
-        <div class="instruction-item"><span class="instruction-key">MOUSE</span> Look & Aim</div>
-        <div class="instruction-item"><span class="instruction-key">L-CLICK</span> Shoot / Fire</div>
-        <div class="instruction-item"><span class="instruction-key">R-CLICK</span> Aim Down Sights</div>
-        <div class="instruction-item"><span class="instruction-key">SHIFT</span> Sprint</div>
-        <div class="instruction-item"><span class="instruction-key">SPACE</span> Jump</div>
-        <div class="instruction-item"><span class="instruction-key">R</span> Reload</div>
-        <div class="instruction-item"><span class="instruction-key">1 2 3</span> Switch Weapon</div>
+      <!-- Mobile Touch Guide (Clear & Easy to Read) -->
+      <div class="mobile-controls-guide">
+        <div class="guide-badge"><span class="guide-tag">LEFT</span> Virtual Joystick to Move</div>
+        <div class="guide-badge"><span class="guide-tag">RIGHT</span> Drag Anywhere to Look & Aim</div>
+        <div class="guide-badge"><span class="guide-tag">FIRE</span> Tap Red Button to Shoot</div>
+        <div class="guide-badge"><span class="guide-tag">ACTIONS</span> AIM • RELOAD • JUMP • CROUCH</div>
+        <div class="guide-badge"><span class="guide-tag">WEAPONS</span> Tap Bottom Slots to Switch Gun</div>
+        <div class="guide-badge"><span class="guide-tag">COMBAT</span> Shoot Red Barrels for Explosive AOE!</div>
       </div>
 
-      <p style="font-size: 12px; color: #a4b0be; margin-bottom: 8px;">
-        💡 On mobile/emulator: Use virtual joystick & on-screen buttons. Shoot explosive red barrels for massive AOE damage! Headshots deal 3x critical damage!
-      </p>
-
       <button class="action-btn-large" id="start-btn">DEPLOY MISSION</button>
+
+      <div class="desktop-hint">Keyboard: WASD Move • Mouse Look/Fire • R Reload • Space Jump</div>
     </div>
   </div>
 

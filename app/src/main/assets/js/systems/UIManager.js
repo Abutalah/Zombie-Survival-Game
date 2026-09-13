@@ -192,6 +192,7 @@ export class UIManager {
         e.preventDefault();
         this.weapons.isFiring = true;
         this.weapons.releaseTrigger();
+        if (this.onFire) this.onFire();
       }, { passive: false });
       fireBtn.addEventListener('touchend', (e) => {
         e.preventDefault();

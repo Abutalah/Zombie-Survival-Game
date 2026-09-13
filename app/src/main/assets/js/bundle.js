@@ -28126,10 +28126,10 @@
       this.initExplosionParticles();
     }
     initLights() {
-      this.scene.fog = new FogExp2(593174, 0.024);
-      const ambientLight = new AmbientLight(2239549, 0.6);
+      this.scene.fog = new FogExp2(922658, 0.016);
+      const ambientLight = new AmbientLight(8426155, 1.2);
       this.scene.add(ambientLight);
-      this.moonLight = new DirectionalLight(9414864, 1.2);
+      this.moonLight = new DirectionalLight(14477306, 1.5);
       this.moonLight.position.set(30, 45, 25);
       this.moonLight.castShadow = true;
       this.moonLight.shadow.mapSize.width = 1024;
@@ -28801,6 +28801,7 @@
           e.preventDefault();
           this.weapons.isFiring = true;
           this.weapons.releaseTrigger();
+          if (this.onFire) this.onFire();
         }, { passive: false });
         fireBtn.addEventListener("touchend", (e) => {
           e.preventDefault();
@@ -29105,6 +29106,7 @@
       );
       this.ui.onResumeGame = () => this.resumeGame();
       this.ui.onPauseGame = () => this.pauseGame();
+      this.ui.onFire = () => this.handleWeaponFire();
       this.environment.onBarrelExploded = (pos, radius, damage) => {
         this.handleExplosionDamage(pos, radius, damage);
       };
@@ -29264,11 +29266,22 @@
       window.addEventListener("contextmenu", (e) => e.preventDefault());
     }
     initWindowEvents() {
-      window.addEventListener("resize", () => {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+      const handleResize = () => {
+        const w = window.innerWidth || document.documentElement.clientWidth || screen.width;
+        const h = window.innerHeight || document.documentElement.clientHeight || screen.height;
+        if (w > 0 && h > 0) {
+          this.camera.aspect = w / h;
+          this.camera.updateProjectionMatrix();
+          this.renderer.setSize(w, h, false);
+        }
+      };
+      window.addEventListener("resize", handleResize);
+      window.addEventListener("orientationchange", () => {
+        setTimeout(handleResize, 100);
+        setTimeout(handleResize, 400);
       });
+      setTimeout(handleResize, 100);
+      setTimeout(handleResize, 500);
       document.addEventListener("visibilitychange", () => {
         if (document.hidden && this.isRunning && !this.isPaused) {
           this.ui.showPauseScreen();
